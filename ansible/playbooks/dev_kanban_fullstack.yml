@@ -1,0 +1,35 @@
+---
+# provision kanban_dev server from ubuntu box
+#
+# what is this "fullstack" nonsense? when using images, it often makes
+# sense to provision a base box with dependencies that rarely change
+# to speed up the build process -- fullstack is the suffix used to let
+# devs know this includes everything, starting from the os image
+#
+# kanban_dev is meant to demonstrate rate-limiting via bash used
+# in a jenkins context, but without forcing you to install java and
+# jenkins... because that requires too much patience
+#
+# [aside on provisioning]
+# do not write roles this way when working with a build pipeline
+# my advice is to write roles like...
+#
+# [installation roles for base image]
+#   - common
+#   - server_deps
+#   - nginx
+#   - redis
+#
+# [configuration roles for baked image]
+#   - conf_common
+#   - conf_server
+#
+# then put configuration steps into the conf_server role, with task lists
+# for nginx, redis, etc. why? you can create an intermediary image
+# from non-configuration roles (e.g. the base image), and make
+# immutable provisioning much faster
+
+- hosts: development
+  roles:
+    - common
+    - redis
